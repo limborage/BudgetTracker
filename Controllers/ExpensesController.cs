@@ -1,0 +1,93 @@
+﻿using BudgetTracker.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BudgetTracker.Controllers
+{
+    public class ExpensesController : Controller
+    {
+        private readonly BudgetTrackerContext _context;
+
+        public ExpensesController(BudgetTrackerContext context)
+        {
+            _context = context;
+        }
+
+        // GET: Expenses
+        public ActionResult Index()
+        {
+            var Expenses = _context.Expenses.ToList();
+
+            return View(Expenses);
+        }
+
+        // GET: Expenses/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        // GET: Expenses/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Expenses/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Expenses/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: Expenses/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Expenses/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: Expenses/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+    }
+}
