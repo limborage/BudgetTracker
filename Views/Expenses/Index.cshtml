@@ -5,17 +5,21 @@
 
 <div class="text-center">
     <h1 class="display-4">Expenses</h1>
+    <a class="btn btn-primary float-end" asp-action="Create">New Expense</a>
     <table class="table table-responsive table-striped">
         <thead>
             <tr>
-                <th>
+                <th class="col">
                     Description
                 </th>
-                <th>
+                <th class="col">
                     Cost
                 </th>
-                <th>
+                <th class="col">
                     Date Created
+                </th>
+                <th class="col">7
+                    
                 </th>
             </tr>
         </thead>
@@ -28,14 +32,32 @@
                             @expense.Description
                         </td>
                         <td>
-                            @expense.Cost
+                            @Html.DisplayFor{model => model.Cost}
                         </td>
                         <td>
-                            @expense.DateCreated
+                            @expense.DateCreated.ToString("dd MMM yyyy") 
+                        </td>
+                        <td>
+                            <div class="btn-group dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="@($"dropdownMenuButton{expense.Id}")" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item">Edit</a></li>
+                                    <li><a class="dropdown-item mt-2">Delete</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 }
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <td>Total:</td>
+                <td>@("R"+Model.Sum(x => x.Cost))</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
     </table>
 </div>

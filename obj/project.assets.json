@@ -7342,24 +7342,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\13laa\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\LeeAaron\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\13laa\\source\\repos\\BudgetTracker\\BudgetTracker.csproj",
+      "projectUniqueName": "C:\\Users\\LeeAaron\\source\\repos\\limborage\\BudgetTracker\\BudgetTracker.csproj",
       "projectName": "BudgetTracker",
-      "projectPath": "C:\\Users\\13laa\\source\\repos\\BudgetTracker\\BudgetTracker.csproj",
-      "packagesPath": "C:\\Users\\13laa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\13laa\\source\\repos\\BudgetTracker\\obj\\",
+      "projectPath": "C:\\Users\\LeeAaron\\source\\repos\\limborage\\BudgetTracker\\BudgetTracker.csproj",
+      "packagesPath": "C:\\Users\\LeeAaron\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\LeeAaron\\Source\\Repos\\limborage\\BudgetTracker\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\13laa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\LeeAaron\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

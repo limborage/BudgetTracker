@@ -8,8 +8,8 @@ namespace BudgetTracker.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string Cost { get; set; }
+        [Required, DisplayFormat(DataFormatString = "{0:c}")]
+        public float Cost { get; set; }
 
         [Required]
         public string Description { get; set; }
@@ -20,6 +20,5 @@ namespace BudgetTracker.Models
             get { return _DateCreated; } 
             set {  _DateCreated = new DateTime(); }
         }
-
     }
 }

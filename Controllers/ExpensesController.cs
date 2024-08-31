@@ -1,4 +1,5 @@
 ﻿using BudgetTracker.Data;
+using BudgetTracker.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace BudgetTracker.Controllers
         public ActionResult Index()
         {
             var Expenses = _context.Expenses.ToList();
+            ViewBag.TotalExpenses = Expenses.Sum(x => x.Cost);
 
             return View(Expenses);
         }
@@ -36,11 +38,13 @@ namespace BudgetTracker.Controllers
         // POST: Expenses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Expense expense)
         {
+            Console.Write(expense.Description);
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             catch
             {
