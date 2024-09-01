@@ -7,19 +7,14 @@
 <h1 class="display-4 text-center">New Expense</h1>
 
 <form asp-action="Create">
-    <input asp-for="Cost" class="form-control" type="hidden" placeholder="Cost" />
     @Html.HiddenFor(m => m.Id)
     <div class="mb-3">
-        <label asp-for="Cost" class="form-label">Cost</label>
-        <input asp-for="Cost" class="form-control" type="number" placeholder="Cost" />
-    </div>
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">Expense Description</label>
+        <label class="form-label">Expense Description</label>
         <input asp-for="Description" class="form-control" type="text" placeholder="Description of Expense" />
     </div>
     <div class="mb-3">
-        <label asp-for="DateCreated" class="form-label">Date Created</label>
-        <input asp-for="DateCreated" class="form-control" type="date" placeholder="Date of Expense" />
+        <label class="form-label">Cost</label>
+        <input asp-for="Cost" class="form-control" type="number" step="any" placeholder="Cost" />
     </div>
     <div>
         <button class="btn btn-primary form-control" type="submit">Add Expense</button> 

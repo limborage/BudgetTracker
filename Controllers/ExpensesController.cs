@@ -18,7 +18,6 @@ namespace BudgetTracker.Controllers
         public ActionResult Index()
         {
             var Expenses = _context.Expenses.ToList();
-            ViewBag.TotalExpenses = Expenses.Sum(x => x.Cost);
 
             return View(Expenses);
         }
@@ -40,10 +39,11 @@ namespace BudgetTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Expense expense)
         {
-            Console.Write(expense.Description);
-
             try
             {
+                _context.Expenses.Add(expense);
+                _context.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             catch

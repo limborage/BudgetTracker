@@ -18,21 +18,20 @@
                 <th class="col">
                     Date Created
                 </th>
-                <th class="col">7
-                    
+                <th class="col">
                 </th>
             </tr>
         </thead>
         <tbody>
             @{
-                foreach (var expense in Model)
+                foreach (Expense expense in Model)
                 {
                     <tr>
                         <td>
                             @expense.Description
                         </td>
                         <td>
-                            @Html.DisplayFor{model => model.Cost}
+                            R@(String.Format("{0:0.00}", expense.Cost))
                         </td>
                         <td>
                             @expense.DateCreated.ToString("dd MMM yyyy") 
