@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Create New Expense";
+}
+
+@model BudgetTracker.Models.Expense
+
+@if (ViewBag.Alert != null)
+{
+    <div class="alert alert-primary">
+        @ViewBag.Alert
+    </div>
+}
+
+<h1 class="display-4 text-center">New Expense</h1>
+
+<form asp-action="Edit">
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.DateCreated)
+    <div class="mb-3">
+        <label class="form-label">Expense Description</label>
+        <input asp-for="Description" class="form-control" type="text" placeholder="Description of Expense" value="@Model.Description" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Cost</label>
+        <input asp-for="Cost" class="form-control" type="number" step="any" placeholder="Cost" value="@Model.Cost" />
+    </div>
+    <div>
+        <button class="btn btn-primary form-control" type="submit">Update Expense</button>
+    </div>
+</form>

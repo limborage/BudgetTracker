@@ -6,17 +6,16 @@ namespace BudgetTracker.Models
 {
     public class Expense
     {
-        public void Expenses()
+        public Expense()
         {
-            this.Description = "Unknown";
-            this.DateCreated = DateTime.Now;
+            Description = "Unknown";
+            DateCreated = DateTime.Now;
         }
 
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:00}")]
         public float Cost { get; set; }
 
         [Required]

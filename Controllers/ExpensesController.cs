@@ -17,6 +17,13 @@ namespace BudgetTracker.Controllers
         // GET: Expenses
         public ActionResult Index()
         {
+            ViewBag.Alert = "";
+
+            if (TempData.Count() > 0 && TempData.Keys.Contains("alert"))
+            {
+                ViewBag.Alert = TempData["alert"].ToString();
+            }
+
             var Expenses = _context.Expenses.ToList();
 
             return View(Expenses);
@@ -41,13 +48,17 @@ namespace BudgetTracker.Controllers
         {
             try
             {
+                //expense.DateCreated = DateTime.Now;
                 _context.Expenses.Add(expense);
                 _context.SaveChanges();
+
+                TempData["alert"] = "Expense has been created.";
 
                 return RedirectToAction("Index");
             }
             catch
             {
+                ViewBag.Alert = "Expense could not be created successfully.";
                 return View();
             }
         }
@@ -55,20 +66,28 @@ namespace BudgetTracker.Controllers
         // GET: Expenses/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Expense? ExistingExpense = _context.Expenses.Find(id);
+
+            return View(ExistingExpense);
         }
 
         // POST: Expenses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Expense expense)
         {
             try
             {
+                _context.Expenses.Update(expense);
+                _context.SaveChanges();
+
+                TempData["alert"] = "Expense has been updated.";
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ViewBag.Alert = "Expense does not exist.";
                 return View();
             }
         }
@@ -76,7 +95,19 @@ namespace BudgetTracker.Controllers
         // GET: Expenses/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Expense? existingExpense = _context.Expenses.SingleOrDefault(model => model.Id == id);
+
+            if (existingExpense != null)
+            {
+                _context.Expenses.Remove(existingExpense);
+                _context.SaveChanges(true);
+                TempData["alert"] = "Expense has been deleted.";
+            } else
+            {
+                TempData["alert"] = "Expense does not exist.";
+            }
+
+            return RedirectToAction("Index");
         }
 
         // POST: Expenses/Delete/5
