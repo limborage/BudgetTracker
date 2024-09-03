@@ -12,5 +12,6 @@ namespace BudgetTracker.Data
         }
 
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<BudgetTracker.Models.Budget> Budget { get; set; } = default!;
     }
 }

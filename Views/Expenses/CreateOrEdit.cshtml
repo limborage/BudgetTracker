@@ -11,7 +11,7 @@
             <a asp-action="Index" class="p-0 btn btn-link text-secondary">&lt; Back To Expenses List</a>
         </div>
 
-        <form asp-controller="Expenses" asp-action="Create">
+        <form asp-controller="Expenses" asp-action="CreateOrEdit">
             @Html.HiddenFor(m => m.Id)
             <div class="mb-3 row">
                 <div class="col-6">

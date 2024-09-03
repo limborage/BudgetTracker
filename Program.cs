@@ -26,14 +26,14 @@ app.UseStaticFiles();
 app.UseRouting();
 
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<BudgetTrackerContext>();
-    context.Database.EnsureCreated();
-    // DbInitializer.Initialize(context);
-}
+//    var context = services.GetRequiredService<BudgetTrackerContext>();
+//    context.Database.EnsureCreated();
+//    // DbInitializer.Initialize(context);
+//}
 
 app.UseAuthorization();
 

@@ -1,7 +1,11 @@
 ﻿using BudgetTracker.Data;
 using BudgetTracker.Models;
+using BudgetTracker.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Controllers
 {
@@ -24,7 +28,7 @@ namespace BudgetTracker.Controllers
                 ViewBag.Alert = TempData["alert"].ToString();
             }
 
-            var Expenses = _context.Expenses.ToList();
+            var Expenses = _context.Expenses.OrderByDescending(expense => expense.DateCreated).Include(expense => expense.Budget).ToList();
 
             return View(Expenses);
         }
@@ -36,58 +40,56 @@ namespace BudgetTracker.Controllers
         }
 
         // GET: Expenses/Create
-        public ActionResult Create()
+        public ActionResult CreateOrEdit(int? id)
         {
+            ViewBag.Budgets = new SelectList(_context.Budget.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList(), "Value", "Text");
+
+            if (id != null)
+            {
+                ViewData["Title"] = "Update Expense";
+                ViewData["SubmitTitle"] = "Update Expense";
+
+                Expense? ExistingExpense = _context.Expenses.Find(id);
+
+                return View(ExistingExpense);
+            }
+
+            ViewData["Title"] = "Create New Expense";
+            ViewData["SubmitTitle"] = "Add Expense";
+
             return View();
         }
 
         // POST: Expenses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Expense expense)
+        public ActionResult CreateOrEdit(Expense expense)
         {
             try
             {
-                //expense.DateCreated = DateTime.Now;
-                _context.Expenses.Add(expense);
+                string entityEvent = "";
+
+                if (expense.Id == 0)
+                {
+                    entityEvent = "created";
+                    expense.Budget = _context.Budget.FirstOrDefault(x => x.Id == expense.BudgetId) ?? null!;
+                    _context.Expenses.Add(expense);
+                } else
+                {
+                    entityEvent = "updated";
+                    _context.Expenses.Update(expense);
+                }
+
+                
                 _context.SaveChanges();
 
-                TempData["alert"] = "Expense has been created.";
+                TempData["alert"] = $"Expense has been {entityEvent}.";
 
                 return RedirectToAction("Index");
             }
             catch
             {
                 ViewBag.Alert = "Expense could not be created successfully.";
-                return View();
-            }
-        }
-
-        // GET: Expenses/Edit/5
-        public ActionResult Edit(int id)
-        {
-            Expense? ExistingExpense = _context.Expenses.Find(id);
-
-            return View(ExistingExpense);
-        }
-
-        // POST: Expenses/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Expense expense)
-        {
-            try
-            {
-                _context.Expenses.Update(expense);
-                _context.SaveChanges();
-
-                TempData["alert"] = "Expense has been updated.";
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                ViewBag.Alert = "Expense does not exist.";
                 return View();
             }
         }
@@ -108,21 +110,6 @@ namespace BudgetTracker.Controllers
             }
 
             return RedirectToAction("Index");
-        }
-
-        // POST: Expenses/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

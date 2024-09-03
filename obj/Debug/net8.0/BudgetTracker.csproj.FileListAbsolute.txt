@@ -476,3 +476,4 @@ C:\Users\LeeAaron\source\repos\limborage\BudgetTracker\obj\Debug\net8.0\scopedcs
 C:\Users\LeeAaron\source\repos\limborage\BudgetTracker\obj\Debug\net8.0\BudgetTr.578BD9FB.Up2Date
 C:\Users\LeeAaron\source\repos\limborage\BudgetTracker\obj\Debug\net8.0\BudgetTracker.genruntimeconfig.cache
 C:\Users\LeeAaron\source\repos\limborage\BudgetTracker\obj\Debug\net8.0\ref\BudgetTracker.dll
+C:\Users\LeeAaron\Source\Repos\limborage\BudgetTracker\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll

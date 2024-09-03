@@ -12,7 +12,7 @@
     }
 
     <h1 class="display-4">Expenses</h1>
-    <a class="btn btn-primary float-end" asp-action="Create">New Expense</a>
+    <a class="btn btn-primary float-end" asp-action="CreateOrEdit">New Expense</a>
     <table class="table table-responsive table-striped">
         <thead>
             <tr>
@@ -25,6 +25,10 @@
                 <th class="col">
                     Date Created
                 </th>
+                <th class="col">
+                    Budget Period
+                </th>
+
                 <th class="col">
                 </th>
             </tr>
@@ -44,12 +48,15 @@
                             @expense.DateCreated.ToString("dd MMM yyyy") 
                         </td>
                         <td>
+                            @expense.Budget.Name 
+                        </td>
+                        <td>
                             <div class="btn-group dropdown">
                                 <button class="btn btn-outline-primary dropdown-toggle" type="button" id="@($"dropdownMenuButton{expense.Id}")" data-bs-toggle="dropdown" aria-expanded="false">
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@expense.Id">Edit</a></li>
+                                    <li><a class="dropdown-item" asp-action="CreateOrEdit" asp-route-id="@expense.Id">Edit</a></li>
                                     <li><a class="dropdown-item mt-2" asp-controller="Expenses" asp-action="Delete" asp-route-id="@expense.Id">Delete</a></li>
                                 </ul>
                             </div>
@@ -59,10 +66,10 @@
             }
         </tbody>
         <tfoot>
-            <tr>
-                <td>Total:</td>
-                <td>R@(String.Format("{0:0.00}", Model.Sum(x => x.Cost)))</td>
-                <td colspan="2"></td>
+            <tr class="bg-secondary text-white">
+                <td class="border">Total:</td>
+                <td class="border-start">R@(String.Format("{0:0.00}", Model.Sum(x => x.Cost)))</td>
+                <td class="border-end" colspan="3"></td>
             </tr>
         </tfoot>
     </table>

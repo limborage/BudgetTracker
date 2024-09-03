@@ -1,5 +1,6 @@
 ﻿using BudgetTracker.Controllers;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace BudgetTracker.Models
@@ -22,5 +23,10 @@ namespace BudgetTracker.Models
         public string Description { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(Budget))]
+        public int BudgetId { get; set; }
+        public Budget Budget { get; set; }
     }
 }
