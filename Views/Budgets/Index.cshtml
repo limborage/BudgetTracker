@@ -28,6 +28,8 @@
                 </th>
                 <th class="col">
                 </th>
+                <th class="col">
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +45,9 @@
                         </td>
                         <td>
                             @budget.BudgetEndDate.ToString("dd MMM yyyy")
+                        </td>
+                        <td>
+                        <a asp-controller="Expenses" asp-action="Index" asp-route-budgetId="@budget.Id" class="btn btn-outline-secondary">See expenses</a>
                         </td>
                         <td>
                             <div class="btn-group dropdown">

@@ -3,16 +3,10 @@
 }
 @model List<Expense>
 
-<div class="text-center">
-    @if (ViewBag.Alert != "") {
-        <div class="alert alert-primary" role="alert">
-            @ViewBag.Alert
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    <h1 class="display-4">Expenses</h1>
+<div class="container">
+    <h1 class="display-4 text-center">Expenses</h1>
     <a class="btn btn-primary float-end" asp-action="CreateOrEdit">New Expense</a>
+    <a class="btn btn-outline-secondary mr-2 float-start" asp-controller="Budgets" asp-action="Index">&lt; Back to Budgets</a>
     <table class="table table-responsive table-striped">
         <thead>
             <tr>
@@ -45,10 +39,10 @@
                             R@(String.Format("{0:0.00}", expense.Cost))
                         </td>
                         <td>
-                            @expense.DateCreated.ToString("dd MMM yyyy") 
+                            @expense.DateCreated.ToString("dd MMM yyyy")
                         </td>
                         <td>
-                            @expense.Budget.Name 
+                            @expense.Budget.Name
                         </td>
                         <td>
                             <div class="btn-group dropdown">

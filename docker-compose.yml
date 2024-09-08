@@ -1,0 +1,36 @@
+version: "3.1"
+
+services:
+  budget_tracker:
+    container_name: budget_tracker
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+        - 8080:8080
+        - 8081:8081
+    networks:
+        - bt_app
+    depends_on:
+        - bt_mysql
+    environment:
+        ASPNETCORE_ENVIRONMENT: Development
+
+  bt_mysql:
+    image: mysql
+    ports:
+        - 3308:3306
+    environment:
+        MYSQL_DATABASE: budget_tracker_db
+        MYSQL_USER: dbuser
+        MYSQL_PASSWORD: dbpass
+        MYSQL_RANDOM_ROOT_PASSWORD: true
+    volumes:
+        - mysql:/var/lib/mysql
+    networks:
+        - bt_app
+        
+volumes:
+    mysql:
+networks:
+    bt_app:

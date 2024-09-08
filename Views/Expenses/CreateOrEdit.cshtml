@@ -1,8 +1,4 @@
-﻿@{
-    ViewData["Title"] = "Create New Expense";
-}
-
-@model Expense
+﻿@model BudgetTracker.ViewModels.ExpenseViewModel
 
 <div class="container">
     <div class="border border-secondary border-3 col-12 p-3">
@@ -17,6 +13,7 @@
                 <div class="col-6">
                     <label class="form-label">Expense Description</label>
                     <input asp-for="Description" class="form-control" type="text" placeholder="Description of Expense" />
+                    @Html.ValidationMessageFor(expense => expense.Description)
                 </div>
             </div>
 
@@ -24,6 +21,7 @@
                 <div class="col-6">
                     <label class="form-label">Cost</label>
                     <input asp-for="Cost" class="form-control" type="number" step="any" placeholder="Cost" />
+                    @Html.ValidationMessageFor(expense => expense.Cost)
                 </div>
             </div>
 
@@ -33,6 +31,9 @@
                 </div>
                 <div class="col-6">
                     @Html.DropDownListFor(model => model.BudgetId, ViewBag.Budgets as SelectList, "Budget Period", new { @class = "form-select" })
+                </div>
+                <div class="col-12">
+                    @Html.ValidationMessageFor(expense => expense.BudgetId)
                 </div>
             </div>
 

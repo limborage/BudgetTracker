@@ -4,40 +4,41 @@
     ViewData["Title"] = "Create New Budget Group";
 }
 
-<h1>Create</h1>
+<div class="container">
+    <div class="border border-secondary border-3 col-12 p-3">
+        <div class="mb-4">
+            <h1 class="display-4">New Budget Period</h1>
+            <a asp-action="Index" class="p-0 btn btn-link text-secondary">&lt; Back To Budget List</a>
+        </div>
 
-<h4>Budget</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        <form asp-controller="Budgets" asp-action="Create">
+            @Html.HiddenFor(m => m.Id)
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">Expense Description</label>
+                    <input asp-for="Name" class="form-control" type="text" placeholder="Name of Budget" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BudgetStartDate" class="control-label"></label>
-                <input asp-for="BudgetStartDate" type="date" class="form-control" />
-                <span asp-validation-for="BudgetStartDate" class="text-danger"></span>
+
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">Budget's Start Date</label>
+                    <input asp-for="BudgetStartDate" class="form-control" type="date"/>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BudgetEndDate" class="control-label"></label>
-                <input asp-for="BudgetEndDate" type="date" class="form-control" />
-                <span asp-validation-for="BudgetEndDate" class="text-danger"></span>
+
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">Budget's End Date</label>
+                    <input asp-for="BudgetEndDate" class="form-control" type="date" />
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="mb-3 row">
+                <div class="col-3">
+                    <button class="btn btn-primary form-control text-center" type="submit">Add Budget</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

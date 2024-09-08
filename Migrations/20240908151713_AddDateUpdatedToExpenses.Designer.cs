@@ -4,6 +4,7 @@ using BudgetTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetTracker.Migrations
 {
     [DbContext(typeof(BudgetTrackerContext))]
-    partial class BudgetTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20240908151713_AddDateUpdatedToExpenses")]
+    partial class AddDateUpdatedToExpenses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

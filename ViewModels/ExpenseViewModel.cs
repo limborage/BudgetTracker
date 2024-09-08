@@ -1,13 +1,12 @@
-﻿using BudgetTracker.Controllers;
-using System.ComponentModel.DataAnnotations;
+﻿using BudgetTracker.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
 
-namespace BudgetTracker.Models
+namespace BudgetTracker.ViewModels
 {
-    public class Expense
+    public class ExpenseViewModel
     {
-        public Expense()
+        public ExpenseViewModel()
         {
             Description = "Unknown";
         }
@@ -21,11 +20,11 @@ namespace BudgetTracker.Models
         [Required]
         public string Description { get; set; }
 
-        public DateTime DateCreated { get; set; }
-        public DateTime DateUpdated { get; set; }
-
+        [Required]
+        [ForeignKey(nameof(Budget))]
         public int BudgetId { get; set; }
 
+        [Required]
         public Budget Budget { get; set; } = null!;
     }
 }
