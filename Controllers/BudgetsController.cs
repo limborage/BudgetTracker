@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BudgetTracker.Data;
 using BudgetTracker.Models;
+using BudgetTracker.ViewModels;
 
 namespace BudgetTracker.Controllers
 {
@@ -46,6 +47,8 @@ namespace BudgetTracker.Controllers
         // GET: Budgets/Create
         public IActionResult Create()
         {
+            ViewData["Title"] = "Create New Budget Group";
+
             return View(new Budget());
         }
 
@@ -63,6 +66,77 @@ namespace BudgetTracker.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(budget);
+        }
+
+        // GET: Expenses/Create
+        public ActionResult CreateOrEdit(int? id)
+        {
+            if (id != null)
+            {
+                ViewData["Title"] = "Update Budget";
+                ViewData["SubmitTitle"] = "Update Budget";
+
+                Budget? ExistingBudget = _context.Budget.Find(id);
+
+                if (ExistingBudget != null)
+                {
+                    return View(ExistingBudget);
+                }
+            }
+
+            ViewData["Title"] = "Create New Expense";
+            ViewData["SubmitTitle"] = "Add Expense";
+
+            return View(new Budget());
+        }
+
+        // POST: Expenses/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateOrEdit(Budget budget)
+        {
+            try
+            {
+                string entityEvent = "";
+
+                if (!ModelState.IsValid)
+                {
+                    return View(budget);
+                }
+
+                if (budget.Id == 0)
+                {
+                    Budget newBudget = new Budget();
+
+                    entityEvent = "created";
+
+                    //UpdateExpenseWithExpenseViewModel(expenseVM, expense);
+
+
+                    _context.Budget.Add(newBudget);
+                }
+                else
+                {
+                    Budget? existingBudget = _context.Budget.Find(budget.Id);
+
+                    entityEvent = "updated";
+
+                    //UpdateExpenseWithExpenseViewModel(expenseVM, expense);
+
+                    _context.Budget.Update(existingBudget);
+                }
+
+                _context.SaveChanges();
+
+                TempData["alert"] = $"Expense has been {entityEvent}.";
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ViewBag.Alert = "Expense could not be created successfully.";
+                return View();
+            }
         }
 
         // GET: Budgets/Edit/5

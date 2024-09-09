@@ -13,12 +13,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BudgetTracker.csproj", "."]
-RUN dotnet tool install --global dotnet-ef --version 8.0.8 && dotnet restore "./BudgetTracker.csproj" 
+RUN dotnet restore "./BudgetTracker.csproj" 
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "./BudgetTracker.csproj" -c $BUILD_CONFIGURATION -o /app/build
 ENV PATH="$PATH:/root/.dotnet/tools"
-RUN dotnet ef database update
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
@@ -29,4 +28,7 @@ RUN dotnet publish "./BudgetTracker.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY BudgetTracker.csproj .
+USER root
+RUN apk upgrade && apk add dotnet8-sdk aspnetcore8-runtime && dotnet tool install --global dotnet-ef
 ENTRYPOINT ["dotnet", "BudgetTracker.dll"]

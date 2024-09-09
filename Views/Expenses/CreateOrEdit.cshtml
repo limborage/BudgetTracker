@@ -4,11 +4,14 @@
     <div class="border border-secondary border-3 col-12 p-3">
         <div class="mb-4">
             <h1 class="display-4">New Expense</h1>
-            <a asp-action="Index" class="p-0 btn btn-link text-secondary">&lt; Back To Expenses List</a>
+            <a asp-action="Index" asp-route-budgetId="@ViewBag.budgetId"  class="p-0 btn btn-link text-secondary">&lt; Back To Expenses List</a>
         </div>
 
         <form asp-controller="Expenses" asp-action="CreateOrEdit">
             @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.BudgetId, new { id = "BudgetId", Value = ViewBag.budgetId })
+            @Html.ValidationMessageFor(expense => expense.BudgetId)
+            @Html.ValidationMessageFor(expense => expense.Budget)
             <div class="mb-3 row">
                 <div class="col-6">
                     <label class="form-label">Expense Description</label>
@@ -22,18 +25,6 @@
                     <label class="form-label">Cost</label>
                     <input asp-for="Cost" class="form-control" type="number" step="any" placeholder="Cost" />
                     @Html.ValidationMessageFor(expense => expense.Cost)
-                </div>
-            </div>
-
-            <div class="mb-3 row">
-                <div class="col-12">
-                    <label class="form-label">Budget Group</label>
-                </div>
-                <div class="col-6">
-                    @Html.DropDownListFor(model => model.BudgetId, ViewBag.Budgets as SelectList, "Budget Period", new { @class = "form-select" })
-                </div>
-                <div class="col-12">
-                    @Html.ValidationMessageFor(expense => expense.BudgetId)
                 </div>
             </div>
 

@@ -19,6 +19,7 @@ namespace BudgetTracker.Controllers
         // GET: Expenses
         public ActionResult Index(int? budgetId)
         {
+            ViewBag.budgetId = budgetId;
             ViewBag.Alert = "";
 
             if (TempData.Count() > 0 && TempData.Keys.Contains("alert"))
@@ -41,11 +42,13 @@ namespace BudgetTracker.Controllers
         }
 
         // GET: Expenses/Create
-        public ActionResult CreateOrEdit(int? id)
+        public ActionResult CreateOrEdit(int budgetId, int? id)
         {
+            ViewBag.budgetId = budgetId;
+            Budget existingBudget = _context.Budget.Find(budgetId);
             ViewBag.Budgets = new SelectList(_context.Budget.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList(), "Value", "Text");
 
-            if (id != null)
+            if (id != null && id != 0)
             {
                 ViewData["Title"] = "Update Expense";
                 ViewData["SubmitTitle"] = "Update Expense";
@@ -59,7 +62,7 @@ namespace BudgetTracker.Controllers
                         Id = ExistingExpense.Id,
                         Description = ExistingExpense.Description,
                         Cost = ExistingExpense.Cost,
-                        BudgetId = ExistingExpense.BudgetId
+                        BudgetId = budgetId
                     };
 
                     return View(ExistingExpense);
@@ -69,7 +72,9 @@ namespace BudgetTracker.Controllers
             ViewData["Title"] = "Create New Expense";
             ViewData["SubmitTitle"] = "Add Expense";
 
-            return View(new ExpenseViewModel());
+            ExpenseViewModel? newExpense = new ExpenseViewModel();
+
+            return View(newExpense);
         }
 
         // POST: Expenses/Create
@@ -77,14 +82,13 @@ namespace BudgetTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrEdit(ExpenseViewModel expenseVM)
         {
+            ViewBag.budgetId = expenseVM.BudgetId;
+
             try
             {
                 string entityEvent = "";
 
-                if (!ModelState.IsValid)
-                {
-                    return View(expenseVM);
-                }
+                expenseVM.Budget = _context.Budget.Find(expenseVM.BudgetId);
 
                 if (expenseVM.Id == 0)
                 {
@@ -111,7 +115,7 @@ namespace BudgetTracker.Controllers
 
                 TempData["alert"] = $"Expense has been {entityEvent}.";
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { budgetId = expenseVM.BudgetId });
             }
             catch
             {
@@ -125,8 +129,9 @@ namespace BudgetTracker.Controllers
             DateTime currentDate = DateTime.Now;
 
             expense.Cost = expenseVM.Cost;
-            expense.Budget = _context.Budget.FirstOrDefault(x => x.Id == expenseVM.BudgetId) ?? null!;
             expense.Description = expenseVM.Description;
+            expense.Budget = _context.Budget.Find(expenseVM.BudgetId);
+            expense.BudgetId = expenseVM.BudgetId;
 
             if (expenseVM.Id == 0)
             {

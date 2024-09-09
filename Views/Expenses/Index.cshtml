@@ -5,7 +5,7 @@
 
 <div class="container">
     <h1 class="display-4 text-center">Expenses</h1>
-    <a class="btn btn-primary float-end" asp-action="CreateOrEdit">New Expense</a>
+    <a class="btn btn-primary float-end" asp-action="CreateOrEdit" asp-route-budgetId="@ViewBag.budgetId">New Expense</a>
     <a class="btn btn-outline-secondary mr-2 float-start" asp-controller="Budgets" asp-action="Index">&lt; Back to Budgets</a>
     <table class="table table-responsive table-striped">
         <thead>
@@ -50,7 +50,7 @@
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" asp-action="CreateOrEdit" asp-route-id="@expense.Id">Edit</a></li>
+                                    <li><a class="dropdown-item" asp-action="CreateOrEdit" asp-route-id="@expense.Id" asp-route-budgetId="@ViewBag.budgetId">Edit</a></li>
                                     <li><a class="dropdown-item mt-2" asp-controller="Expenses" asp-action="Delete" asp-route-id="@expense.Id">Delete</a></li>
                                 </ul>
                             </div>

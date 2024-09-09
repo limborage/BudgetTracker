@@ -24,6 +24,9 @@ namespace BudgetTracker.Models
         public DateTime DateCreated { get; set; }
         public DateTime DateUpdated { get; set; }
 
+
+        [Required]
+        [ForeignKey(nameof(Budget))]
         public int BudgetId { get; set; }
 
         public Budget Budget { get; set; } = null!;

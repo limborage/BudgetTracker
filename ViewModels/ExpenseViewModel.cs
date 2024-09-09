@@ -6,11 +6,6 @@ namespace BudgetTracker.ViewModels
 {
     public class ExpenseViewModel
     {
-        public ExpenseViewModel()
-        {
-            Description = "Unknown";
-        }
-
         [Key]
         public int Id { get; set; }
 
@@ -23,8 +18,6 @@ namespace BudgetTracker.ViewModels
         [Required]
         [ForeignKey(nameof(Budget))]
         public int BudgetId { get; set; }
-
-        [Required]
-        public Budget Budget { get; set; } = null!;
+        public Budget Budget { get; set; }
     }
 }

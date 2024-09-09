@@ -13,7 +13,7 @@
     }
 
     <h1 class="display-4">Budgets</h1>
-    <a class="btn btn-primary float-end" asp-action="Create">New Budget</a>
+    <a class="btn btn-primary float-end" asp-action="CreateOrEdit">New Budget</a>
     <table class="table table-responsive table-striped">
         <thead>
             <tr>
@@ -55,7 +55,7 @@
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@budget.Id">Edit</a></li>
+                                    <li><a class="dropdown-item" asp-action="CreateOrEdit" asp-route-id="@budget.Id">Edit</a></li>
                                     <li><a class="dropdown-item mt-2" asp-controller="Budgets" asp-action="Delete" asp-route-id="@budget.Id">Delete</a></li>
                                 </ul>
                             </div>
