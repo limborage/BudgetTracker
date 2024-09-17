@@ -1,0 +1,34 @@
+﻿@model List<BudgetTracker.ViewModels.ExpenseViewIndexModel>
+
+@{
+    int i = 0;
+    foreach (BudgetTracker.ViewModels.ExpenseViewIndexModel expense in Model)
+    {
+        <tr id="expenseRow_" class="expense-row">
+            <td>
+                @expense.Description
+            </td>
+            <td>
+                R@(String.Format("{0:0.00}", expense.Cost))
+            </td>
+            <td>
+                @expense.DateCreated.ToString("dd MMM yyyy")
+            </td>
+            <td>
+                @expense.BudgetName
+            </td>
+            <td>
+                <div class="btn-group dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="@($"dropdownMenuButton{expense.Id}")" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" asp-action="CreateOrEdit" asp-route-id="@expense.Id" asp-route-budgetId="@ViewBag.budgetId">Edit</a></li>
+                        <li><a class="dropdown-item mt-2" asp-controller="Expenses" asp-action="Delete" asp-route-id="@expense.Id" asp-route-budgetId="@ViewBag.budgetId">Delete</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        i++;
+    }
+}

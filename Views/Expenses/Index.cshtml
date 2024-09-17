@@ -1,13 +1,31 @@
 ﻿@{
     ViewData["Title"] = "Expenses";
 }
-@model List<Expense>
+@model List<BudgetTracker.ViewModels.ExpenseViewIndexModel>
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
 
 <div class="container">
     <h1 class="display-4 text-center">Expenses</h1>
-    <a class="btn btn-primary float-end" asp-action="CreateOrEdit" asp-route-budgetId="@ViewBag.budgetId">New Expense</a>
+    <div id="alert_message">
+        @if (ViewBag.Alert != null && ViewBag.Alert != "")
+        {
+            var alertType = (ViewBag.isAlertError != null && ViewBag.isAlertError) ? "alert-danger" : "alert-success";
+
+            <div class="alert @alertType" id="inner_alert">@ViewBag.Alert</div>
+        }
+    </div>
+
     <a class="btn btn-outline-secondary mr-2 float-start" asp-controller="Budgets" asp-action="Index">&lt; Back to Budgets</a>
-    <table class="table table-responsive table-striped">
+    <table class="table table-responsive table-striped" id="expensesTable">
         <thead>
             <tr>
                 <th class="col">
@@ -27,37 +45,28 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-            @{
-                foreach (Expense expense in Model)
-                {
-                    <tr>
-                        <td>
-                            @expense.Description
-                        </td>
-                        <td>
-                            R@(String.Format("{0:0.00}", expense.Cost))
-                        </td>
-                        <td>
-                            @expense.DateCreated.ToString("dd MMM yyyy")
-                        </td>
-                        <td>
-                            @expense.Budget.Name
-                        </td>
-                        <td>
-                            <div class="btn-group dropdown">
-                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="@($"dropdownMenuButton{expense.Id}")" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Actions
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" asp-action="CreateOrEdit" asp-route-id="@expense.Id" asp-route-budgetId="@ViewBag.budgetId">Edit</a></li>
-                                    <li><a class="dropdown-item mt-2" asp-controller="Expenses" asp-action="Delete" asp-route-id="@expense.Id">Delete</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            }
+        <tbody id="expenseTableBody">
+            <tr class="visually-hidden" id="expenseRowPrototype">
+                <td><input class="form-control" name="Description" id="Description" type="text" /></td>
+                <td><input class="form-control" name="Cost" id="Cost" type="number" step="0.01" /></td>
+                <td></td>
+                <td>@ViewBag.budgetName</td>
+                <td>
+                    <button onclick="saveNewExpense(this)" type="button" class="btn btn-primary">
+                        <i class="bi bi-save"></i>
+                        Save
+                    </button>
+                </td>
+                <td class="visually-hidden"><input name="BudgetId" id="BudgetId" /></td>
+            </tr>
+            <partial name="ExpenseRow" model="Model"/>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <button type="button" class="btn btn-outline-secondary border-0" name="addExpense" id="addExpense" onclick="addExpenseRow(this)">
+                        <i class="bi bi-plus-circle size" style="font-size: 2rem;"></i>
+                    </button>
+                </td>
+            </tr>
         </tbody>
         <tfoot>
             <tr class="bg-secondary text-white">
@@ -68,3 +77,61 @@
         </tfoot>
     </table>
 </div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var innerAlert = $("#inner_alert");
+            if (innerAlert.is(":visible")) {
+                innerAlert.fadeOut(5000);
+                setTimeout(function () {
+                    innerAlert.remove()
+                }, 5000);
+            }
+        });
+
+        function saveNewExpense(element) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CreateOrEdit")",
+                dataType: "html",
+                headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+                data: {
+                    "Id": 0,
+                    "Description": $(element).closest("tr").find("#Description").val(),
+                    "Cost": $(element).closest("tr").find("#Cost").val(),
+                    "DateCreated": $(element).closest("tr").find("#DateCreated").val(),
+                    "BudgetId": "@ViewBag.BudgetId"
+                },
+                success: function (data) {
+                    $(".expense-row").remove();
+                    $("#expenseRowPrototype").after(data);
+                    element.closest("tr").remove();
+
+                    const innerAlert = $("#inner_alert");
+                    innerAlert.remove();
+                    const newInnerAlert = $("<div class=\"alert alert-success\">Succesfully added new expense.</div>");
+                    newInnerAlert.fadeIn(800).appendTo("#alert_message");
+                    newInnerAlert.fadeOut(8000);
+                    setTimeout(function () {
+                        newInnerAlert.remove();
+                    }, 8000);
+
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+        function addExpenseRow(element) {
+            var rowClone = document.getElementById("expenseRowPrototype").cloneNode(true);
+            const expenseRows = document.getElementsByClassName("expense-row");
+            let rowCount = expenseRows.length + 1;
+            rowClone.id = "expenseRow_" + rowCount;
+            rowClone.classList.remove("visually-hidden");
+            expenseRows[expenseRows.length - 1].after(rowClone);
+        }
+    </script>
+}

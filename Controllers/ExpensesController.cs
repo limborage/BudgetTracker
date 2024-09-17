@@ -19,20 +19,35 @@ namespace BudgetTracker.Controllers
         // GET: Expenses
         public ActionResult Index(int? budgetId)
         {
+            ViewBag.budgetName = _context.Budget.Find(budgetId).Name;
             ViewBag.budgetId = budgetId;
             ViewBag.Alert = "";
 
             if (TempData.Count() > 0 && TempData.Keys.Contains("alert"))
             {
                 ViewBag.Alert = TempData["alert"].ToString();
+                ViewBag.isAlertError = TempData["error"];
             }
 
-            var expenses = _context.Expenses
-                .OrderByDescending(expenseModel => expenseModel.DateCreated)
-                .Include(expenseModel => expenseModel.Budget)
-                .Where(expense => budgetId != null ? expense.Budget.Id == budgetId : true);
+            IQueryable<ExpenseViewIndexModel> expenses = getExpensesForBudget(budgetId);
 
             return View(expenses.ToList());
+        }
+
+        private IQueryable<ExpenseViewIndexModel> getExpensesForBudget(int? budgetId)
+        {
+            return _context.Expenses
+                            .OrderByDescending(expenseModel => expenseModel.DateCreated)
+                            .Where(expense => budgetId != null ? expense.Budget.Id == budgetId : true)
+                            .Select(e => new ExpenseViewIndexModel()
+                            {
+                                Id = e.Id,
+                                Cost = e.Cost,
+                                Description = e.Description,
+                                DateCreated = e.DateCreated,
+                                BudgetName = e.Budget.Name
+                            })
+                            ;
         }
 
         // GET: Expenses/Details/5
@@ -113,13 +128,20 @@ namespace BudgetTracker.Controllers
 
                 _context.SaveChanges();
 
+                TempData["error"] = false;
                 TempData["alert"] = $"Expense has been {entityEvent}.";
+                var expenses = getExpensesForBudget(expenseVM.BudgetId).ToList();
 
-                return RedirectToAction("Index", new { budgetId = expenseVM.BudgetId });
+                return PartialView("~/Views/Expenses/ExpenseRow.cshtml", expenses);
+
+                //return Json(new { message = "Expense created succesfully", isError = false, expenseList = PartialView("~/Views/Expenses/ExpenseRow.cshtml", expenses) });
+
+                //return RedirectToAction("Index", new { budgetId = expenseVM.BudgetId });
             }
             catch
             {
                 ViewBag.Alert = "Expense could not be created successfully.";
+                ViewBag.isAlertError = true;
                 return View();
             }
         }
@@ -142,7 +164,7 @@ namespace BudgetTracker.Controllers
         }
 
         // GET: Expenses/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, int budgetId)
         {
             Expense? existingExpense = _context.Expenses.SingleOrDefault(model => model.Id == id);
 
@@ -150,13 +172,15 @@ namespace BudgetTracker.Controllers
             {
                 _context.Expenses.Remove(existingExpense);
                 _context.SaveChanges(true);
+                TempData["error"] = false;
                 TempData["alert"] = "Expense has been deleted.";
             } else
             {
+                TempData["error"] = true;
                 TempData["alert"] = "Expense does not exist.";
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { budgetId });
         }
     }
 }
